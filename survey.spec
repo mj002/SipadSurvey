@@ -1,12 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
     ['survey.py'],
-    pathex=[],
-    binaries=[],
+    # Build with the dependency versions shipped in this repository.
+    pathex=['Lib/site-packages'],
     datas=[],
-    hiddenimports=[],
+    # Selenium exposes webdriver.Chrome through a lazy import. PyInstaller
+    # cannot discover that module from the attribute access alone.
+    hiddenimports=[
+        'selenium.webdriver.chrome.webdriver',
+        'selenium.webdriver.chrome.options',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

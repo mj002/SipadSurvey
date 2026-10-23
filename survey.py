@@ -25,7 +25,7 @@ PWA_NEVER_SHOW_KEY = "pwa_never_show_forever"
 PWA_PROMPT_TIMEOUT = 5
 DRIVER_DOWNLOAD_TIMEOUT = 30
 HUAWEI_CHROMEDRIVER_INDEX = "https://repo.huaweicloud.com/chromedriver/"
-CHROMEDRIVER_CACHE_DIRECTORY = "SipadSurvey/chromedriver"
+CHROMEDRIVER_CACHE_DIRECTORY = "chromedriver_cache"
 
 CHROMEDRIVER_MIRROR_TEMPLATES = {
     "modern": (
@@ -240,9 +240,13 @@ def _driver_version_candidates(chrome_version):
 
 
 def _driver_cache_root():
-    app_data = os.environ.get("LOCALAPPDATA")
-    root = Path(app_data) if app_data else Path.home()
-    return root / CHROMEDRIVER_CACHE_DIRECTORY
+    """Keep downloaded drivers beside the script or packaged executable."""
+    application_directory = (
+        Path(sys.executable).resolve().parent
+        if getattr(sys, "frozen", False)
+        else Path(__file__).resolve().parent
+    )
+    return application_directory / CHROMEDRIVER_CACHE_DIRECTORY
 
 
 def _find_cached_chromedriver(chrome_version):
